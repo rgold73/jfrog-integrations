@@ -1,14 +1,26 @@
-pipeline {
-  agent any
-  stages {
-    stage('thumbs') {
-      steps {
-        sh 'echo "this will be the greatest test ever."'
-      }
+node {
+
+    stage ('Clone') {
+        git url: 'https://github.com/sonar-scanning-examples.git'
     }
 
-  }
-  environment {
-    label = 'master'
-  }
+    stage ('Prebuild') {
+	echo "Prebuild"
+    }
+
+
+    stage ('Build') {
+        sh -c "cd sonarqube-scanner-maven; mvn clean install sonar:sonar"
+	
+    }
+
+    stage ('PostBuild') {
+        sh -c "export WAIT_FOR_ANALYSIS=true; ./artifactory-sonar.sh true"
+    }
+
+    stage ('Staging') {
+        echo "Promoted to Staging"
+    }
+
 }
+
