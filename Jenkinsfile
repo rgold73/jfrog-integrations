@@ -15,7 +15,7 @@ node {
     }
 
     stage ('PostBuild') {
-        sh -c "export WAIT_FOR_ANALYSIS=true; ./artifactory-sonar.sh true"
+        sh -c "export WAIT_FOR_ANALYSIS=true; ./sonarqube/artifactory/artifactory-sonar.sh true"
     }
 
     stage ('Staging') {
